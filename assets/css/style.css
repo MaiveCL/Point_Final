@@ -1,0 +1,21 @@
+.zone-erreur {
+    border: 1px solid red;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border-style: dotted;
+    color: red;
+    font-size: medium;
+    font-style: italic;
+    margin-bottom: 2rem!important;
+}
+
+.zone-info {
+    border: 1px solid green;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border-style: dotted;
+    color: green;
+    font-size: medium;
+    font-style: italic;
+    margin-bottom: 2rem!important;
+}

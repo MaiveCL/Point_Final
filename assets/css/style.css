@@ -72,24 +72,88 @@ h1 {
     font-family: "nelson", sans-serif;
     font-weight: 700;
     font-style: normal;
+    color: #ffffff;
+    text-shadow:
+    0 0 2px #ff00c8,
+    0 0 4px #e100ff,
+    0 0 6px #00e0ff;
   }
+
+h2 {
+    margin: 20px auto -7px 15%;
+  }
+
+h5 {
+  color: white;
+  font-size: 14px;
+  font-weight: normal;
+  text-align: center;
+  margin: 10px 0;
+}
+
+p {
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 auto 1em auto;
+  text-shadow: none;
+}
+
+.max {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.conteneur-boites {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
 
 .boite-de-contenu {
   background-color: white;
   border-radius: 16px;
   padding: 20px;
-  margin: 20px auto;
-  max-width: 600px;
+  margin: 0px auto 20px auto;
+  /*max-width: 600px;*/
   color: black;
 
-  /* Contour dégradé néon */
+   /* Contour transparent des 2 boîtes superposées (via background-image) */
+  /* Laisse apparaître le dégradé de la boîte "du dessous" */
   border: 3px solid transparent;
+
+  /* Contrôle la zone que chaque fond doit remplir */
+  /* 1er fond = intérieur (padding-box), 2e fond = toute la boîte incluant le bord (border-box) */
   background-clip: padding-box, border-box;
+
+  /* Origine commune du background : le bord extérieur (pour bien caler le dégradé) */
   background-origin: border-box;
 
+  /* Deux fonds superposés */
   background-image:
-    linear-gradient(white, white),
-    linear-gradient(to right, #ff00c8, #00e0ff); /* rose fluo → bleu néon */
-  
+    linear-gradient(white, white),        /* Boîte supérieure blanche */
+    linear-gradient(to right, #ff00c8, #00e0ff); /* Boîte inférieure dégradé */
+
+  /* Effet de lumière néon autour de la boîte */
   box-shadow: 0 0 10px #ff00c8, 0 0 10px #00e0ff;
+}
+/* Sur background-image on peut appliquer une image, 
+un dégradé css, un motif css répété 
+repeating-linear-gradient(black 0px, black 2px, white 2px, white 4px) 
+ou une forme SVG url("data:image/svg+xml,...")*/
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #111; /* ou autre fond foncé */
+  color: white;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 14px;
+  z-index: 1000; /* pour qu’il soit au-dessus du contenu */
 }

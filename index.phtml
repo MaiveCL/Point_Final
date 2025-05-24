@@ -1,9 +1,11 @@
 <?php
 require_once "config.php";
 require_once 'session.php';
+$utilisateurDao = new UtilisateurDao($config);
 
 //$infos[] = "Un message d'information";
 //$erreurs[] = "Un message d'erreur";
+$nbJoueurs = $utilisateurDao->compterJoueurs();
 ?>
 
 <!DOCTYPE html>
@@ -15,29 +17,29 @@ require_once 'session.php';
 </head>
 
 <body>
-    <?php require_once 'section/entete.phtml'; ?>
+    <div class="contenu">
+        <?php require_once 'section/entete.phtml'; ?>
+            <div class="max">
+                <?php require_once 'section/retroaction.phtml'; ?>
 
-    <div class="max">
-        <?php require_once 'section/retroaction.phtml'; ?>
-
-        <div>
-                <h2>Bienvenue sur Point final!</h1>
-        </div>
-        <div class="conteneur-boites">
-                <div class="boite-de-contenu">
-                    <p>Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir "remettre dans la face" de ses adversaires leurs défaites!</p>
+                <div>
+                        <h2>Bienvenue sur Point final!</h2>
                 </div>
-        </div>
+                <div class="conteneur-boites">
+                        <div class="boite-de-contenu">
+                            <p>Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir "remettre dans la face" de ses adversaires leurs défaites!</p>
+                        </div>
+                </div>
 
-        <div class="conteneur-boites">
-            <div class="boite-de-contenu">test</div>
-            <div class="boite-de-contenu">test</div>
-            <div class="boite-de-contenu">test</div>
-            <div class="boite-de-contenu">test</div>
-        </div>
+                <div class="conteneur-boites">
+                    <div class="boite-de-contenu"><h3><?= $nbJoueurs ?></h3><br>Joueurs</div>
+                    <div class="boite-de-contenu">test</div>
+                    <div class="boite-de-contenu">test</div>
+                    <div class="boite-de-contenu">test</div>
+                </div>
+            </div>
+        <?php require_once 'section/pied.phtml'; ?>
     </div>
-
-    <?php require_once 'section/pied.phtml'; ?>
 </body>
 
 </html>

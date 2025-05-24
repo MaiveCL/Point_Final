@@ -37,6 +37,11 @@
 body {
     background-color: #1a1a1a;
     color: white;
+    background-image: url('../img/Mix2.png'); /* adapte le chemin */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* pour un effet plus "pro" */
+    padding-bottom: 60px;
 }
 html, body {
     overflow: hidden;
@@ -66,29 +71,32 @@ button {
     background: yellow;
     color: black;
 }
+
 h1 {
     font-size: 3rem;
     margin: 0;
     font-family: "nelson", sans-serif;
-    font-weight: 700;
-    font-style: normal;
     color: #ffffff;
     text-shadow:
     0 0 2px #ff00c8,
     0 0 4px #e100ff,
     0 0 6px #00e0ff;
-  }
+}
 
 h2 {
-    margin: 20px auto -7px 15%;
+    margin: 20px auto -7px 5.5%;
   }
 
-h5 {
-  color: white;
-  font-size: 14px;
-  font-weight: normal;
-  text-align: center;
-  margin: 10px 0;
+h3 {
+    font-size: 4rem;
+    margin: -10px;
+    font-family: "nelson", sans-serif;
+    color: #ffffff;
+    text-shadow:
+    0 0 2px #ff00c8,
+    0 0 4px #e100ff,
+    0 0 6px #00e0ff;
+    text-align: center;
 }
 
 p {
@@ -98,6 +106,7 @@ p {
   line-height: 1.5;
   margin: 0 auto 1em auto;
   text-shadow: none;
+  text-align: left;
 }
 
 .max {
@@ -111,6 +120,7 @@ p {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  text-align: justify;
 }
 
 .boite-de-contenu {
@@ -150,10 +160,22 @@ footer {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #111; /* ou autre fond foncé */
+  background-color: #000000; /* ou autre fond foncé */
+
   color: white;
   text-align: center;
   padding: 5px 0;
   font-size: 14px;
   z-index: 1000; /* pour qu’il soit au-dessus du contenu */
+}
+
+.contenu {
+    max-width: 1200px;
+    height: 100%;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.1);
+
+    box-shadow: 0 0 15px #00ffff88;
 }

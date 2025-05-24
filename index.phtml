@@ -1,12 +1,15 @@
 <?php
 require_once "config.php";
 require_once 'session.php';
-$utilisateurDao = new UtilisateurDao($config);
+
 $jeuDao = new JeuDao($config);
+$partieDao = new PartieDao($config);
+$utilisateurDao = new UtilisateurDao($config);
 
 //$infos[] = "Un message d'information";
 //$erreurs[] = "Un message d'erreur";
 $nbJoueurs = $utilisateurDao->compterJoueurs();
+$nbParties = $partieDao->compterParties();
 $nbJeux = $jeuDao->compterJeux();
 ?>
 
@@ -36,7 +39,7 @@ $nbJeux = $jeuDao->compterJeux();
                 <div class="conteneur-boites">
                     <div class="boite-de-contenu"><h3><?= $nbJoueurs ?></h3><br>Joueurs</div>
                     <div class="boite-de-contenu"><h3><?= $nbJeux ?></h3><br>JEUX</div>
-                    <div class="boite-de-contenu">test</div>
+                    <div class="boite-de-contenu"><h3><?= $nbParties ?></h3><br>Parties jouées</div>
                     <div class="boite-de-contenu">test</div>
                 </div>
             </div>

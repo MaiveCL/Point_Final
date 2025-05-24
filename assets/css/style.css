@@ -165,8 +165,9 @@ footer {
   color: white;
   text-align: center;
   padding: 5px 0;
-  font-size: 14px;
+  font-size: 12px;
   z-index: 1000; /* pour qu’il soit au-dessus du contenu */
+  text-shadow: none;
 }
 
 .contenu {

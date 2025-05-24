@@ -41,10 +41,9 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* pour un effet plus "pro" */
-    padding-bottom: 60px;
+    padding-bottom: 70px;
 }
 html, body {
-    overflow: hidden;
     height: 100%;
 }
 
@@ -72,9 +71,8 @@ button {
     color: black;
 }
 
-h1 {
-    font-size: 3rem;
-    margin: 0;
+h1, h2, h3, h4 {
+    text-align: center;
     font-family: "nelson", sans-serif;
     color: #ffffff;
     text-shadow:
@@ -83,20 +81,22 @@ h1 {
     0 0 6px #00e0ff;
 }
 
+h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
 h2 {
-    margin: 20px auto -7px 5.5%;
+    margin: 20px auto -7px auto;
   }
 
 h3 {
     font-size: 4rem;
     margin: -10px;
-    font-family: "nelson", sans-serif;
-    color: #ffffff;
-    text-shadow:
-    0 0 2px #ff00c8,
-    0 0 4px #e100ff,
-    0 0 6px #00e0ff;
-    text-align: center;
+}
+h4 {
+    font-size: 2rem;
+    margin: 0px -10px;
 }
 
 p {
@@ -149,6 +149,7 @@ p {
 
   /* Effet de lumière néon autour de la boîte */
   box-shadow: 0 0 10px #ff00c8, 0 0 10px #00e0ff;
+  text-align: center;
 }
 /* Sur background-image on peut appliquer une image, 
 un dégradé css, un motif css répété 

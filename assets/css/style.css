@@ -19,3 +19,77 @@
     font-style: italic;
     margin-bottom: 2rem!important;
 }
+  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: "nelson-rugged", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+    text-shadow:
+    1px 1px 0 white, /* faux gras blanc (léger contour) */
+    2px 2px 6px rgba(0, 0, 0, 0.8); /* vraie ombre sombre */
+    letter-spacing: 0.05em;
+}
+body {
+    background-color: #1a1a1a;
+    color: white;
+}
+html, body {
+    overflow: hidden;
+    height: 100%;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: "nelson-engraved", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.vert-btn {
+    background: green;
+}
+
+.rouge-btn {
+    background: red;
+}
+.jaune-btn {
+    background: yellow;
+    color: black;
+}
+h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-family: "nelson", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+.boite-de-contenu {
+  background-color: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+  color: black;
+
+  /* Contour dégradé néon */
+  border: 3px solid transparent;
+  background-clip: padding-box, border-box;
+  background-origin: border-box;
+
+  background-image:
+    linear-gradient(white, white),
+    linear-gradient(to right, #ff00c8, #00e0ff); /* rose fluo → bleu néon */
+  
+  box-shadow: 0 0 10px #ff00c8, 0 0 10px #00e0ff;
+}

@@ -23,6 +23,11 @@ class JeuDao extends BaseDao
         return $jeux;
     }
 
+    public function compterJeux(): int {
+        $connexion = $this->getConnexion();
+        $requete = $connexion->query("SELECT COUNT(*) FROM jeu");
+        return (int) $requete->fetchColumn();
+    }
 
     public function select(int $id): ?Jeu
     {

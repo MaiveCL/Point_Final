@@ -19,3 +19,174 @@
     font-style: italic;
     margin-bottom: 2rem!important;
 }
+  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: "nelson-rugged", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+    text-shadow:
+    1px 1px 0 white, /* faux gras blanc (léger contour) */
+    2px 2px 6px rgba(0, 0, 0, 0.8); /* vraie ombre sombre */
+    letter-spacing: 0.05em;
+}
+body {
+    background-color: #000000;
+    color: white;
+    background-image: url('../img/Mix2.png'); /* adapte le chemin */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* pour un effet plus "pro" */
+    padding-bottom: 70px;
+}
+html, body {
+    height: 100%;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: "nelson-engraved", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.vert-btn {
+    background: green;
+}
+
+.rouge-btn {
+    background: red;
+}
+.jaune-btn {
+    background: yellow;
+    color: black;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+    font-family: "nelson", sans-serif;
+    color: #ffffff;
+    text-shadow:
+    0 0 2px #ff00c8,
+    0 0 4px #e100ff,
+    0 0 6px #00e0ff;
+}
+
+h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+h2 {
+    margin: 20px auto -7px auto;
+  }
+
+h3 {
+    font-size: 4rem;
+    margin: -10px;
+}
+h4 {
+    font-size: 2rem;
+    margin: 21px -10px 5px -10px;
+}
+
+p {
+    color: black;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 auto 1em auto;
+    text-shadow: none;
+    text-align: left;
+}
+
+.max {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+}
+
+.conteneur-boites {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.boite-de-contenu {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0px auto 20px auto;
+    /*max-width: 600px;*/
+    color: black;
+
+    /* Contour transparent des 2 boîtes superposées (via background-image) */
+    /* Laisse apparaître le dégradé de la boîte "du dessous" */
+    border: 3px solid transparent;
+
+    /* Contrôle la zone que chaque fond doit remplir */
+    /* 1er fond = intérieur (padding-box), 2e fond = toute la boîte incluant le bord (border-box) */
+    background-clip: padding-box, border-box;
+
+    /* Origine commune du background : le bord extérieur (pour bien caler le dégradé) */
+    background-origin: border-box;
+
+    /* Deux fonds superposés */
+    background-image:
+        linear-gradient(white, white),        /* Boîte supérieure blanche */
+        linear-gradient(to right, #ff00c8, #00e0ff); /* Boîte inférieure dégradé */
+
+    /* Effet de lumière néon autour de la boîte */
+    box-shadow: 0 0 10px #ff00c8, 0 0 10px #00e0ff;
+    text-align: center;
+    transition: background-image 0.4s ease, transform 0.3s ease;
+}
+/* Sur background-image on peut appliquer une image, 
+un dégradé css, un motif css répété 
+repeating-linear-gradient(black 0px, black 2px, white 2px, white 4px) 
+ou une forme SVG url("data:image/svg+xml,...")*/
+
+.boite-de-contenu.clickable:hover {
+    background-image:
+        linear-gradient(#000000, #000000), /* Couleur intérieure au survol */
+        linear-gradient(to right, #ff00c8, #00e0ff); /* Toujours le même contour */
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000000; /* ou autre fond foncé */
+
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 12px;
+    z-index: 1000; /* pour qu’il soit au-dessus du contenu */
+    text-shadow: none;
+}
+
+.contenu {
+    max-width: 1200px;
+    min-height: 85vh;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.1);
+
+    box-shadow: 0 0 15px #00ffff88;
+}

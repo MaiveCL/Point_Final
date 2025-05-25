@@ -2,8 +2,24 @@
 require_once "config.php";
 require_once 'session.php';
 
+// initialisation des DAO
+$jeuDao = new JeuDao($config);
+$partieDao = new PartieDao($config);
+$statDao = new StatistiqueDao($config);
+$utilisateurDao = new UtilisateurDao($config);
+
 //$infos[] = "Un message d'information";
 //$erreurs[] = "Un message d'erreur";
+
+// Récupération des informations pour les variables à afficher
+$classement = $statDao->selectClassementGlobal();
+if (!empty($classement)) {
+    $meilleur = $classement[0];
+}
+$nbJoueurs = $utilisateurDao->compterJoueurs();
+$nbParties = $partieDao->compterParties();
+$nbJeux = $jeuDao->compterJeux();
+
 ?>
 
 <!DOCTYPE html>
@@ -15,15 +31,36 @@ require_once 'session.php';
 </head>
 
 <body>
-    <?php require_once 'section/entete.phtml'; ?>
+    <div class="contenu">
+        <?php require_once 'section/entete.phtml'; ?>
+            <div class="max">
+                <?php require_once 'section/retroaction.phtml'; ?>
 
-    <div>
-        <?php require_once 'section/retroaction.phtml'; ?>
+                <div>
+                        <h2>Bienvenue sur Point final!</h2>
+                </div>
+                <div class="conteneur-boites">
+                        <div class="boite-de-contenu">
+                            <p>Point final est simplement un site qui répertorie les résultats des parties jouées sur l'arcade du département afin de pouvoir "remettre dans la face" de ses adversaires leurs défaites!</p>
+                        </div>
+                </div>
 
-        Vous n'êtes pas obligé de prendre cette structure de page... vous êtes libre de faire comme vous le voulez.
+                <div class="conteneur-boites">
+                    <div class="boite-de-contenu"><h3><?= $nbJoueurs ?></h3><br>Joueurs</div>
+                    <div class="boite-de-contenu"><h3><?= $nbJeux ?></h3><br>JEUX</div>
+                    <div class="boite-de-contenu"><h3><?= $nbParties ?></h3><br>Parties jouées</div>
+
+                    <a href="profil.phtml?id=<?= $meilleur->getJoueurId() ?>" style="text-decoration: none; color: inherit;">
+                        <div class="boite-de-contenu clickable">
+                            <h4><?= htmlspecialchars($meilleur->getNomComplet()) ?></h4>
+                            <br>Meilleur joueur actuel
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        <?php require_once 'section/pied.phtml'; ?>
     </div>
-
-    <?php require_once 'section/pied.phtml'; ?>
 </body>
 
 </html>

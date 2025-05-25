@@ -10,6 +10,14 @@ class UtilisateurDao extends BaseDao
         $this->roleDao = new RoleDao($config);
     }
 
+    // ***** MA FONCTION pour compte les utilisateurs (donc joueurs inscrits) *****
+    // pour + de performances, on utilise query() plutôt que prepare(), car pas besoin de execute() et bindValue() car il n'y a pas de variables provenant de l'utilisateur
+    public function compterJoueurs(): int {
+        $connexion = $this->getConnexion();
+        $requete = $connexion->query("SELECT COUNT(*) FROM utilisateur");
+        return (int) $requete->fetchColumn();
+    }
+
     public function select(int $id): ?Utilisateur
     {
         $connexion = $this->getConnexion();

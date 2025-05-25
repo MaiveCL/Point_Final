@@ -1,0 +1,1 @@
+La typographie utilisée est libre de droit à condition de ne pas faire l'objet de revenus de vente directe.

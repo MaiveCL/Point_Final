@@ -64,6 +64,7 @@ class StatistiqueDao extends BaseDao
     }
 
 
+
     /**
      * Permet d'obtenir les statistiques d'un joueur spécifique.    
      * 

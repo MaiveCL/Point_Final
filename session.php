@@ -28,7 +28,6 @@ function mettreAjourTempsActivite(): void
         else
         {
             detruireSession();
-            // Ajustez la page si elle se nomme différemment pour vous...
             header('Location: connexion.phtml');
             exit();
         }

@@ -116,4 +116,21 @@ class UtilisateurDao extends BaseDao
         $requete->execute();
     }
 
+    public function selectTousLesJoueurs(): array
+    {
+        $connexion = $this->getConnexion();
+        $requete = $connexion->prepare("SELECT * FROM utilisateur WHERE role_id = 2 ORDER BY prenom, nom");
+        $requete->execute();
+
+        $joueurs = [];
+        while ($enregistrement = $requete->fetch()) {
+            $joueur = $this->construireUtilisateur($enregistrement);
+            $joueur->setRole($this->roleDao->select($joueur->getRoleId()));
+            $joueurs[] = $joueur;
+        }
+
+        return $joueurs;
+    }
+
+
 }

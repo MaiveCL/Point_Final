@@ -28,7 +28,12 @@ $utilisateurConnecte = getUtilisateurConnecte();
                     </div>
                     <div class="sous-menu">
                         <a href="profil.phtml?id=<?= $utilisateurConnecte->getId() ?>" class="boite-de-contenu clickable">Voir profil</a>
+
                         <a href="gerer-compte.phtml" class="boite-de-contenu clickable">Gérer le compte</a>
+
+                        <?php if ($utilisateurConnecte->getRoleId() === 1) : ?>
+                            <a href="ajouterPartie.phtml" class="boite-de-contenu clickable">Ajouter une partie</a>
+                        <?php endif; ?>
                     </div>
                 </li>
                 

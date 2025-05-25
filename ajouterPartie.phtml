@@ -1,0 +1,129 @@
+<?php
+require_once 'config.php';
+require_once 'session.php';
+
+$utilisateurConnecte = getUtilisateurConnecte();
+
+if (!$utilisateurConnecte || $utilisateurConnecte->getRoleId() !== 1) {
+    header("Location: index.phtml");
+    exit();
+}
+
+$erreurs = [];
+$infos = [];
+
+$utilisateurDao = new UtilisateurDao($config);
+$jeuDao = new JeuDao($config);
+$partieDao = new PartieDao($config);
+
+// Récupération des joueurs (joueurs seulement)
+$joueurs = $utilisateurDao->selectTousLesJoueurs();
+$jeux = $jeuDao->selectAll();
+
+if (isset($_POST['bouton-ajouter'])) {
+    $j1 = $_POST['joueur1'] ?? '';
+    $j2 = $_POST['joueur2'] ?? '';
+    $score1 = $_POST['score1'] ?? '';
+    $score2 = $_POST['score2'] ?? '';
+    $jeuId = $_POST['jeu'] ?? '';
+
+    // Validation
+    if (!ctype_digit($j1) || !ctype_digit($j2) || !ctype_digit($score1) || !ctype_digit($score2) || !ctype_digit($jeuId)) {
+        $erreurs[] = "Tous les champs doivent être des entiers valides.";
+    } if ((int)$j1 === (int)$j2) {
+        $erreurs[] = "Le joueur 1 et le joueur 2 doivent être différents.";
+    } if ((int)$score1 < 0 || (int)$score2 < 0) {
+        $erreurs[] = "Les scores doivent être supérieurs ou égaux à 0.";
+    }
+
+    if (empty($erreurs)) {
+        $partie = new Partie(
+            null,
+            (int)$j1,
+            (int)$j2,
+            (int)$jeuId,
+            (int)$score1,
+            (int)$score2
+        );
+
+        $partieDao->insert($partie);
+        $infos[] = "Partie ajoutée avec succès.";
+    }
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Ajouter une partie</title>
+</head>
+<body>
+<div class="contenu">
+    <?php require_once 'section/entete.phtml'; ?>
+    <div class="max">
+        <?php require_once 'section/retroaction.phtml'; ?>
+
+        <h2>Ajouter une nouvelle partie</h2>
+
+        <form method="post" action="ajouterPartie.phtml">
+            <div>
+                <label>Joueur 1
+                    <select name="joueur1" required>
+                        <option value="">-- Choisir --</option>
+                        <?php foreach ($joueurs as $j): ?>
+                            <option value="<?= $j->getId() ?>" <?= (isset($j1) && $j1 == $j->getId()) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($j->getPrenom()) ?> <?= htmlspecialchars($j->getNom()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                <label>Score joueur 1
+                    <input type="number" min="0" name="score1" value="<?= $score1 ?? '' ?>" required>
+                </label>
+            </div>
+
+            <div>
+                <label>Joueur 2
+                    <select name="joueur2" required>
+                        <option value="">-- Choisir --</option>
+                        <?php foreach ($joueurs as $j): ?>
+                            <option value="<?= $j->getId() ?>" <?= (isset($j2) && $j2 == $j->getId()) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($j->getPrenom()) ?> <?= htmlspecialchars($j->getNom()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                <label>Score joueur 2
+                    <input type="number" min="0" name="score2" value="<?= $score2 ?? '' ?>" required>
+                </label>
+            </div>
+
+            <div>
+                <label>Jeu
+                    <select name="jeu" required>
+                        <option value="">-- Choisir --</option>
+                        <?php foreach ($jeux as $jeu): ?>
+                            <option value="<?= $jeu->getId() ?>" <?= (isset($jeuId) && $jeuId == $jeu->getId()) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($jeu->getNom()) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+
+            <div>
+                <input type="submit" name="bouton-ajouter" class="btn btn-primary" value="Ajouter la partie">
+            </div>
+        </form>
+    </div>
+    <?php require_once 'section/pied.phtml'; ?>
+</div>
+</body>
+</html>

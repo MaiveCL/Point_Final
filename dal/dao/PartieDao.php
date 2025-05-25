@@ -82,13 +82,40 @@ class PartieDao extends BaseDao
     private function construirePartie(array $enregistrement): Partie
     {
         return new Partie(
-            new DateTime($enregistrement['date_creation']),  // 1. Date
-            (int) $enregistrement['j1_id'],                // 2. Joueur 1
-            (int) $enregistrement['j2_id'],                // 3. Joueur 2
-            (int) $enregistrement['j1_score'],             // 4. Score J1
-            (int) $enregistrement['j2_score'],             // 5. Score J2
-            (int) $enregistrement['jeu_id'],               // 6. Jeu
-            (int) $enregistrement['id']                    // 7. ID
+            new DateTime($enregistrement['date_creation']),
+            (int) $enregistrement['j1_id'],
+            (int) $enregistrement['j2_id'],
+            (int) $enregistrement['j1_score'],
+            (int) $enregistrement['j2_score'],
+            (int) $enregistrement['jeu_id'],
+            (int) $enregistrement['id']
         );
     }
+
+    public function insert(Partie $partie): void
+    {
+        $connexion = $this->getConnexion();
+
+        $sql = "INSERT INTO partie (
+                    date_creation,
+                    j1_id,
+                    j2_id,
+                    j1_score,
+                    j2_score,
+                    jeu_id
+                ) VALUES (
+                    NOW(), :j1_id, :j2_id, :j1_score, :j2_score, :jeu_id
+                )";
+
+        $requete = $connexion->prepare($sql);
+        $requete->bindValue(':j1_id', $partie->getJoueur1Id(), PDO::PARAM_INT);
+        $requete->bindValue(':j2_id', $partie->getJoueur2Id(), PDO::PARAM_INT);
+        $requete->bindValue(':j1_score', $partie->getScoreJoueur1(), PDO::PARAM_INT);
+        $requete->bindValue(':j2_score', $partie->getScoreJoueur2(), PDO::PARAM_INT);
+        $requete->bindValue(':jeu_id', $partie->getJeuId(), PDO::PARAM_INT);
+        $requete->execute();
+
+        $partie->setId((int) $connexion->lastInsertId());
+    }
+
 }

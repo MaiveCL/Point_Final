@@ -12,6 +12,7 @@
     2px 2px 6px rgba(0, 0, 0, 0.8); /* vraie ombre sombre */
     letter-spacing: 0.05em;
 }
+
 body {
     background-color: #000000;
     color: white;
@@ -21,6 +22,7 @@ body {
     background-attachment: fixed;
     padding-bottom: 70px;
 }
+
 html, body {
     height: 100%;
 }
@@ -48,6 +50,7 @@ h3 {
     font-size: 4rem;
     margin: -10px;
 }
+
 h4 {
     font-size: 2rem;
     margin: 21px -10px 5px -10px;
@@ -78,6 +81,7 @@ p {
 }
 
 .boite-de-contenu {
+    max-width: 900px;
     background-color: white;
     border-radius: 16px;
     padding: 20px;
@@ -111,6 +115,12 @@ un dégradé css, un motif css répété
 repeating-linear-gradient(black 0px, black 2px, white 2px, white 4px) 
 ou une forme SVG url("data:image/svg+xml,...")*/
 
+.boite-de-contenu.clickable {
+    margin: auto;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
 .boite-de-contenu.clickable:hover {
     background-image:
         linear-gradient(#000000, #000000), /* Couleur intérieure au survol */
@@ -139,9 +149,9 @@ footer {
 
 .contenu {
     max-width: 1200px;
-    height: 90vh;
+    min-height: 95vh;
     margin: auto;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 2rem;
     border: 1px solid rgba(0,0,0,0.1);
 
@@ -197,7 +207,7 @@ table a {
 }
 
 table a:hover {
-    color: #007bff;
+    color: #ffffff;
     text-decoration: underline;
 }
 
@@ -211,6 +221,36 @@ table tbody tr:hover {
 
 form {
     text-align: right;
-    margin: 0 auto; /* centre horizontalement */
+    margin: 10px auto; /* centre horizontalement */
     max-width: 400px; /* limite la largeur pour un affichage plus propre */
+}
+
+input:not([type="submit"]):not([type="button"]):not([type="reset"]) {
+    font-family: 'Roboto', sans-serif;
+    padding: 2px 4px;
+    margin: 1px;
+}
+
+
+/* Tentative de menu déroulant */
+
+.menu-deroulant {
+    position: relative;
+    display: block; /* ici on corrige le bloc flex */
+}
+
+.sous-menu {
+    margin-top: -41px;
+    margin-left: -9px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    z-index: 1000;
+    text-align: center;
+}
+
+.menu-deroulant:hover .sous-menu {
+    display: block;
 }

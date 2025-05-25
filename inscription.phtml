@@ -92,38 +92,41 @@ $utilisateurConnecte = getUtilisateurConnecte();
 
         <div>
             <form action="inscription.phtml" method="post">
+                <div class="boite-de-contenu">
+                    Tous les champs sont obligatoires
+                </div>
                 <div>
-                    <label>Nom d'utilisateur* :
+                    <label>Nom d'utilisateur
                         <input type="text" name="nom-utilisateur" class="form-control" value="<?= $nomUtilisateur ?? '' ?>" required>
                     </label>
                 </div>
                 <div>
-                    <label>Mot de passe* :
+                    <label>Mot de passe
                         <input type="password" name="mot-de-passe" class="form-control" required>
                     </label>
                 </div>
                 <div>
-                    <label>Confirmation du mot de passe* :
+                    <label>Confirmez le mot de passe
                         <input type="password" name="confirmation" class="form-control" required>
                     </label>
                 </div>
                 <div>
-                    <label>Prénom* :
+                    <label>Prénom
                         <input type="text" name="prenom" class="form-control" value="<?= $prenom ?? '' ?>" required>
                     </label>
                 </div>
                 <div>
-                    <label>Nom* :
+                    <label>Nom
                         <input type="text" name="nom" class="form-control" value="<?= $nom ?? '' ?>" required>
                     </label>
                 </div>
                 <div>
-                    <label>Bio* :
+                    <label>Bio
                         <textarea name="bio" class="form-control" rows="3" required><?= $bio ?? '' ?></textarea>
                     </label>
                 </div>
                 <div>
-                    <label>URL de l’avatar* :
+                    <label>URL de l’avatar
                         <input type="url" name="avatar" class="form-control" value="<?= $avatar ?? '' ?>" required>
                     </label>
                 </div>

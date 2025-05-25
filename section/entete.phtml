@@ -1,3 +1,8 @@
+<?php
+require_once 'session.php';
+$utilisateurConnecte = getUtilisateurConnecte();
+?>
+
 <header>
     <nav id="menu-principal">
         <ul>
@@ -6,10 +11,38 @@
                     <img src="assets/img/logo.webp" alt="Logo" width="100" height="100" />
                 </a>
             </li>
+
             <li><a href="classement.phtml" class="boite-de-contenu clickable">Classement</a></li>
             <li><a href="parties.phtml" class="boite-de-contenu clickable">Toutes les parties</a></li>
-            <li><a href="connexion.phtml" class="boite-de-contenu clickable">Connexion</a></li>
-            <li><a href="inscription.phtml" class="boite-de-contenu clickable">Inscription</a></li>
+
+            <?php if (!$utilisateurConnecte): ?>
+
+                <li><a href="connexion.phtml" class="boite-de-contenu clickable">Connexion</a></li>
+                <li><a href="inscription.phtml" class="boite-de-contenu clickable">Inscription</a></li>
+            
+            <?php else: ?>
+
+                <li class="menu-deroulant">
+                    <div class="boite-de-contenu clickable nom-utilisateur">
+                        <?= htmlspecialchars($utilisateurConnecte->getNomUtilisateur()) ?> ▼
+                    </div>
+                    <div class="sous-menu">
+                        <a href="profil.phtml?id=<?= $utilisateurConnecte->getId() ?>" class="boite-de-contenu clickable">Voir profil</a>
+                        <a href="gerer-compte.phtml" class="boite-de-contenu clickable">Gérer le compte</a>
+                    </div>
+                </li>
+                
+                <li>
+                    <a href="#" class="boite-de-contenu clickable" onclick="document.getElementById('form-deconnexion').submit(); return false;">
+                        Se déconnecter
+                    </a>
+                    <form id="form-deconnexion" method="post" action="connexion.phtml" style="display: none;">
+                        <input type="hidden" name="bouton-deconnexion" value="1">
+                    </form>
+                </li>
+
+            <?php endif; ?>
+
         </ul>
     </nav>
 </header>

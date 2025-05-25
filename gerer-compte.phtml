@@ -1,0 +1,101 @@
+<?php
+require_once 'config.php';
+require_once 'session.php';
+
+$erreurs = [];
+$infos = [];
+
+$utilisateurConnecte = getUtilisateurConnecte();
+
+// Vérifie l'utilisateur connecté
+if (!$utilisateurConnecte) {
+    header("Location: connexion.phtml");
+    exit();
+}
+
+// Plus besoin de vérifier $_GET['id']
+$utilisateurDao = new UtilisateurDao($config);
+
+if (isset($_POST['bouton-modifier'])) {
+    $prenom = trim($_POST['prenom'] ?? '');
+    $nom = trim($_POST['nom'] ?? '');
+    $bio = trim($_POST['bio'] ?? '');
+    $avatar = trim($_POST['avatar'] ?? '');
+
+    if ($prenom === '' || $nom === '' || $bio === '' || $avatar === '') {
+        $erreurs[] = "Tous les champs doivent être remplis.";
+    }
+    if (strlen($prenom) > 50 || strlen($prenom) < 1) {
+        $erreurs[] = "Le prénom doit faire entre 1 et 50 caractères.";
+    }
+    if (strlen($nom) > 50 || strlen($nom) < 1) {
+        $erreurs[] = "Le nom doit faire entre 1 et 50 caractères.";
+    }
+    if (strlen($bio) > 255) {
+        $erreurs[] = "La bio ne peut pas dépasser 255 caractères.";
+    }
+    if (!filter_var($avatar, FILTER_VALIDATE_URL)) {
+        $erreurs[] = "L'URL de l'avatar est invalide.";
+    }
+
+    if (empty($erreurs)) {
+        $utilisateurConnecte->setPrenom($prenom);
+        $utilisateurConnecte->setNom($nom);
+        $utilisateurConnecte->setBio($bio);
+        $utilisateurConnecte->setUrlAvatar($avatar);
+
+        $utilisateurDao->updateInfos($utilisateurConnecte);
+
+        $utilisateurActualise = $utilisateurDao->select($utilisateurConnecte->getId());
+        setUtilisateurConnecte($utilisateurActualise);
+        $utilisateurConnecte = $utilisateurActualise;
+
+        $infos[] = "Modification réussie.";
+    }
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Gérer mon compte</title>
+</head>
+<body>
+    <div class="contenu">
+        <?php require_once 'section/entete.phtml'; ?>
+        <div class="max">
+            <?php require_once 'section/retroaction.phtml'; ?>
+
+            <h2>Modifier mes informations</h2>
+
+            <form method="post" action="gerer-compte.phtml?id=<?= $utilisateurConnecte->getId() ?>">
+                <div>
+                    <label>Prénom :
+                        <input type="text" name="prenom" value="<?= htmlspecialchars($utilisateurConnecte->getPrenom()) ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Nom :
+                        <input type="text" name="nom" value="<?= htmlspecialchars($utilisateurConnecte->getNom()) ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Bio :
+                        <textarea name="bio" rows="3" required><?= htmlspecialchars($utilisateurConnecte->getBio()) ?></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label>URL avatar :
+                        <input type="url" name="avatar" value="<?= htmlspecialchars($utilisateurConnecte->getUrlAvatar()) ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <input type="submit" name="bouton-modifier" value="Enregistrer les modifications">
+                </div>
+            </form>
+        </div>
+        <?php require_once 'section/pied.phtml'; ?>
+    </div>
+</body>
+</html>

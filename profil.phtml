@@ -78,6 +78,7 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
 
 
                 <?php if ($parties) : ?>
+
                     <h2>Toutes les parties jouées</h2>
                     <div class="conteneur-boites">
                         <?php foreach ($parties as $partie) :
@@ -88,8 +89,11 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
                             <div class="boite-de-contenu">
                                 <div>
                                     <div>
-                                        <img src="<?= htmlspecialchars($j1->getUrlAvatar()) ?>" alt="J1" width="60" class="rounded-circle"><br>
-                                        <small><?= htmlspecialchars($j1->getPrenom()) ?> <?= htmlspecialchars($j1->getNom()) ?></small><br>
+
+                                        <a href="profil.phtml?id=<?= $j1->getId() ?>">
+                                            <img src="<?= htmlspecialchars($j1->getUrlAvatar()) ?>" alt="J1" width="60" class="logo">
+                                        </a><br>
+                                        <small><?= htmlspecialchars($j1->getPrenom()) ?> <?= htmlspecialchars($j1->getNom()) ?></small> : 
                                         <strong><?= $partie->getScoreJoueur1() ?></strong>
                                     </div>
                                     <div>
@@ -98,8 +102,10 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
                                         <small><?= htmlspecialchars($jeu->getNom()) ?></small>
                                     </div>
                                     <div>
-                                        <img src="<?= htmlspecialchars($j2->getUrlAvatar()) ?>" alt="J2" width="60" class="rounded-circle"><br>
-                                        <small><?= htmlspecialchars($j2->getPrenom()) ?> <?= htmlspecialchars($j2->getNom()) ?></small><br>
+                                        <a href="profil.phtml?id=<?= $j2->getId() ?>">
+                                            <img src="<?= htmlspecialchars($j2->getUrlAvatar()) ?>" alt="J2" width="60" class="logo">
+                                        </a><br>
+                                        <small><?= htmlspecialchars($j2->getPrenom()) ?> <?= htmlspecialchars($j2->getNom()) ?></small> : 
                                         <strong><?= $partie->getScoreJoueur2() ?></strong>
                                     </div>
                                 </div>
@@ -107,11 +113,13 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
                             </div>
                         <?php endforeach; ?>
                     </div>
+
                 <?php else : ?>
                     <div class="boite-de-contenu">
                         <p>Aucune partie trouvée.</p>
                     </div>
                 <?php endif; ?>
+
             </div>
 
         <?php require_once 'section/pied.phtml'; ?>

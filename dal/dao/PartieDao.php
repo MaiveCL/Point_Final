@@ -12,6 +12,25 @@ class PartieDao extends BaseDao
         $this->jeuDao = new JeuDao($config);
     }
 
+    public function selectDernieresParties(int $limite = 6): array {
+    $connexion = $this->getConnexion();
+    $sql = "SELECT * FROM partie ORDER BY date_creation DESC LIMIT :limite";
+    $requete = $connexion->prepare($sql);
+    $requete->bindValue(':limite', $limite, PDO::PARAM_INT);
+    $requete->execute();
+
+    $parties = [];
+    while ($enregistrement = $requete->fetch()) {
+        $partie = $this->construirePartie($enregistrement);
+        $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
+        $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
+        $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
+        $parties[] = $partie;
+    }
+
+    return $parties;
+}
+
     // ***** MA FONCTION pour compter les parties jouées *****
     // Pas besoin de prepare() ici : requête sans paramètres utilisateurs = plus performant avec query().
     public function compterParties(): int
@@ -53,5 +72,4 @@ class PartieDao extends BaseDao
             (int) $enregistrement['id']                    // 7. ID
         );
     }
-
 }

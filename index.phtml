@@ -16,6 +16,8 @@ $classement = $statDao->selectClassementGlobal();
 if (!empty($classement)) {
     $meilleur = $classement[0];
 }
+
+$dernieresParties = $partieDao->selectDernieresParties(6);
 $nbJoueurs = $utilisateurDao->compterJoueurs();
 $nbParties = $partieDao->compterParties();
 $nbJeux = $jeuDao->compterJeux();
@@ -57,6 +59,52 @@ $nbJeux = $jeuDao->compterJeux();
                         </div>
                     </a>
                 </div>
+
+
+
+
+                <h2 class="text-center">Dernières parties jouées</h2>
+
+                <?php if ($dernieresParties) : ?>
+
+                    <div class="conteneur-boites">
+                        <?php foreach ($dernieresParties as $partie) :
+                            $j1 = $partie->getJoueur1();
+                            $j2 = $partie->getJoueur2();
+                            $jeu = $partie->getJeu();
+                        ?>
+                            <div class="boite-de-contenu">
+                                <div class="d-flex justify-content-around align-items-center">
+                                    <div>
+                                        <a href="profil.phtml?id=<?= $j1->getId() ?>">
+                                            <img src="<?= htmlspecialchars($j1->getUrlAvatar()) ?>" alt="J1" width="60" class="logo">
+                                        </a><br>
+                                        <small><?= htmlspecialchars($j1->getPrenom()) ?> <?= htmlspecialchars($j1->getNom()) ?></small> : 
+                                        <strong><?= $partie->getScoreJoueur1() ?></strong>
+                                    </div>
+                                    <div>
+                                        <strong>VS</strong><br>
+                                        <img src="<?= htmlspecialchars($jeu->getUrlImageJeu()) ?>" alt="Jeu" width="50"><br>
+                                        <small><?= htmlspecialchars($jeu->getNom()) ?></small>
+                                    </div>
+                                    <div>
+                                        <a href="profil.phtml?id=<?= $j2->getId() ?>">
+                                            <img src="<?= htmlspecialchars($j2->getUrlAvatar()) ?>" alt="J2" width="60" class="logo">
+                                        </a><br>
+                                        <small><?= htmlspecialchars($j2->getPrenom()) ?> <?= htmlspecialchars($j2->getNom()) ?></small> : 
+                                        <strong><?= $partie->getScoreJoueur2() ?></strong>
+                                    </div>
+                                </div>
+                                <small>Résultat ajouté le <?= $partie->getDateCreation()->format('Y-m-d H:i') ?></small>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    
+                <?php else : ?>
+                    <div class="boite-de-contenu">
+                        <p>Aucune partie trouvée.</p>
+                    </div>
+                <?php endif; ?>
 
             </div>
         <?php require_once 'section/pied.phtml'; ?>

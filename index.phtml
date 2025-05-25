@@ -49,8 +49,15 @@ $nbJeux = $jeuDao->compterJeux();
                     <div class="boite-de-contenu"><h3><?= $nbJoueurs ?></h3><br>Joueurs</div>
                     <div class="boite-de-contenu"><h3><?= $nbJeux ?></h3><br>JEUX</div>
                     <div class="boite-de-contenu"><h3><?= $nbParties ?></h3><br>Parties jouées</div>
-                    <div class="boite-de-contenu"><h4><?= $meilleur->getNomComplet() ?></h4><br>Meilleur joueur actuel</div>
+
+                    <a href="profil.phtml?id=<?= $meilleur->getJoueurId() ?>" style="text-decoration: none; color: inherit;">
+                        <div class="boite-de-contenu clickable">
+                            <h4><?= htmlspecialchars($meilleur->getNomComplet()) ?></h4>
+                            <br>Meilleur joueur actuel
+                        </div>
+                    </a>
                 </div>
+
             </div>
         <?php require_once 'section/pied.phtml'; ?>
     </div>

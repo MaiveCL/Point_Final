@@ -1,0 +1,120 @@
+<?php
+require_once "config.php";
+
+$utilisateurDao = new UtilisateurDao($config);
+$statDao = new StatistiqueDao($config);
+$partieDao = new PartieDao($config);
+
+$erreurs = array();
+$infos = array();
+$utilisateur = null;
+$statistiques = null;
+$parties = array();
+
+// ctype_digit() : plus strict, idéal pour valider un ID d'entité de base de données (toujours INT UNSIGNED)
+// ne fonctionne pas sur les vrai nombre, juste des string,
+// les données venant de $_GET, $_POST ou $_REQUEST sont toujours des chaînes de caractères
+if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
+    $id = (int) $_GET['id'];
+    $utilisateur = $utilisateurDao->select($id);
+    $statistiques = $statDao->selectClassementGlobalParJoueur($id);
+    $parties = $partieDao->selectParJoueurId($id);
+    // vérifier si partie a bien été récupéré
+    // if (!empty($parties)) {
+    //     echo "<script>alert('Parties récupérées : " . count($parties) . "');</script>";
+    // } else {
+    //     echo "<script>alert('Aucune partie trouvée');</script>";
+    // }    // vérifier si ça marche en mettant une allerte ici
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Profil du joueur</title>
+</head>
+<body>
+    <div class="contenu">
+        <?php require_once 'section/entete.phtml'; ?>
+
+            <div class="max">
+                <?php require_once 'section/retroaction.phtml'; ?>
+
+                <?php if ($utilisateur) : ?>
+
+                    <div>
+                        <h2><?= htmlspecialchars($utilisateur->getPrenom()) ?> <?= htmlspecialchars($utilisateur->getNom()) ?></h2>
+                    </div>
+
+                    <div class="conteneur-boites">
+                        <div class="boite-de-contenu">
+                            <img src="<?= htmlspecialchars($utilisateur->getUrlAvatar() ?: "/img/image-profil-place-holder.png") ?>" alt="Avatar" width="150" class="rounded-circle">
+                            <p><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($utilisateur->getNomUtilisateur()) ?></p>
+                            <p><strong>Bio :</strong> <?= htmlspecialchars($utilisateur->getBio()) ?></p>
+                            <p><strong>Membre depuis :</strong> <?= $utilisateur->getDateCreation()?->format('Y-m-d') ?></p>
+                            <p><strong>Type de compte :</strong> <?= $utilisateur->getRoleId() === 1 ? 'Administrateur' : 'Joueur' ?></p>
+                        </div>
+
+                        <div class="boite-de-contenu">
+                            <h4>Statistiques</h4>
+                            <?php if ($statistiques) : ?>
+                                <ul>
+                                    <li>Victoires : <?= $statistiques->getNbPartiesGagnees() ?></li>
+                                    <li>Égalités : <?= $statistiques->getNbPartiesEgales() ?></li>
+                                    <li>Défaites : <?= $statistiques->getNbPartiesPerdues() ?></li>
+                                    <li>Parties jouées : <?= $statistiques->getNbPartiesJouees() ?></li>
+                                    <li>Score total : <?= $statistiques->getScoreTotal() ?></li>
+                                </ul>
+                            <?php else : ?>
+                                <p>Aucune statistique disponible.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php else : ?>
+                    <div class="boite-de-contenu">Utilisateur introuvable.</div>
+                <?php endif; ?>
+
+
+
+                <?php if ($parties) : ?>
+                    <h2>Toutes les parties jouées</h2>
+                    <div class="conteneur-boites">
+                        <?php foreach ($parties as $partie) :
+                            $j1 = $partie->getJoueur1();
+                            $j2 = $partie->getJoueur2();
+                            $jeu = $partie->getJeu();
+                        ?>
+                            <div class="boite-de-contenu">
+                                <div>
+                                    <div>
+                                        <img src="<?= htmlspecialchars($j1->getUrlAvatar()) ?>" alt="J1" width="60" class="rounded-circle"><br>
+                                        <small><?= htmlspecialchars($j1->getPrenom()) ?> <?= htmlspecialchars($j1->getNom()) ?></small><br>
+                                        <strong><?= $partie->getScoreJoueur1() ?></strong>
+                                    </div>
+                                    <div>
+                                        <strong>VS</strong><br>
+                                        <img src="<?= htmlspecialchars($jeu->getUrlImageJeu()) ?>" alt="Jeu" width="50"><br>
+                                        <small><?= htmlspecialchars($jeu->getNom()) ?></small>
+                                    </div>
+                                    <div>
+                                        <img src="<?= htmlspecialchars($j2->getUrlAvatar()) ?>" alt="J2" width="60" class="rounded-circle"><br>
+                                        <small><?= htmlspecialchars($j2->getPrenom()) ?> <?= htmlspecialchars($j2->getNom()) ?></small><br>
+                                        <strong><?= $partie->getScoreJoueur2() ?></strong>
+                                    </div>
+                                </div>
+                                <small>Résultat ajouté le <?= $partie->getDateCreation()->format('Y-m-d H:i') ?></small>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else : ?>
+                    <div class="boite-de-contenu">
+                        <p>Aucune partie trouvée.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+        <?php require_once 'section/pied.phtml'; ?>
+    </div>
+</body>
+</html>

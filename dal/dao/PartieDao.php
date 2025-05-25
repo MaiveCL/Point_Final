@@ -12,6 +12,25 @@ class PartieDao extends BaseDao
         $this->jeuDao = new JeuDao($config);
     }
 
+    public function selectToutesParties(): array {
+    $connexion = $this->getConnexion();
+    $sql = "SELECT * FROM partie ORDER BY date_creation DESC";
+    $requete = $connexion->prepare($sql);
+    $requete->execute();
+
+    $parties = [];
+    while ($enregistrement = $requete->fetch()) {
+        $partie = $this->construirePartie($enregistrement);
+        $partie->setJoueur1($this->utilisateurDao->select($partie->getJoueur1Id()));
+        $partie->setJoueur2($this->utilisateurDao->select($partie->getJoueur2Id()));
+        $partie->setJeu($this->jeuDao->select($partie->getJeuId()));
+        $parties[] = $partie;
+    }
+
+    return $parties;
+}
+
+
     public function selectDernieresParties(int $limite = 6): array {
     $connexion = $this->getConnexion();
     $sql = "SELECT * FROM partie ORDER BY date_creation DESC LIMIT :limite";

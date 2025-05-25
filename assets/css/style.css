@@ -171,8 +171,37 @@ nav#menu-principal a.boite-de-contenu {
     color: black;
     min-width: 140px;
 }
+
 .logo:hover{
     transform: scale(1.2);
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+th, td, tr, table{
+    vertical-align: middle;
+    padding: 5px 0px 5px 20px;
+}
+
+table a {
+    text-decoration: none;
+    color: inherit;
+    text-align: right;
+}
+
+table a:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+table tr:nth-child(even) {
+    background-color: #c795db; /* gris pâle */
+}
+
+table tbody tr:hover {
+    background-color: #375698; /* surbrillance plus visible au survol */
 }

@@ -1,0 +1,67 @@
+<?php
+require_once "config.php";
+
+$statistiqueDao = new StatistiqueDao($config);
+$classement = $statistiqueDao->selectClassementGlobal();
+
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Classement des joueurs</title>
+</head>
+<body>
+    <div class="contenu">
+        <?php require_once 'section/entete.phtml'; ?>
+
+        <div class="max">
+            <?php require_once 'section/retroaction.phtml'; ?>
+
+            <h2>Classement des joueurs</h2>
+
+            <?php if ($classement) : ?>
+                <div class="boite-de-contenu">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nom du joueur</th>
+                                <th>Victoires</th>
+                                <th>Égalités</th>
+                                <th>Défaites</th>
+                                <th>Parties jouées</th>
+                                <th>Score total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($classement as $index => $joueur) : ?>
+                                <tr>
+                                    <td><?= $index + 1 ?></td>
+                                    <td>
+                                        <a href="profil.phtml?id=<?= $joueur->getJoueurId() ?>">
+                                            <?= htmlspecialchars($joueur->getNomComplet()) ?>
+                                        </a>
+                                    </td>
+                                    <td><?= $joueur->getNbPartiesGagnees() ?></td>
+                                    <td><?= $joueur->getNbPartiesEgales() ?></td>
+                                    <td><?= $joueur->getNbPartiesPerdues() ?></td>
+                                    <td><?= $joueur->getNbPartiesJouees() ?></td>
+                                    <td><strong><?= $joueur->getScoreTotal() ?></strong></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else : ?>
+                <div class="boite-de-contenu">
+                    <p>Aucun joueur trouvé dans le classement.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php require_once 'section/pied.phtml'; ?>
+    </div>
+</body>
+</html>

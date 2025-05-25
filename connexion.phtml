@@ -1,0 +1,98 @@
+<?php
+require_once 'config.php';
+require_once 'session.php';
+
+$erreurs = [];
+$infos = [];
+
+// Gestion de la connexion
+if (isset($_POST['bouton-connexion']))
+{
+    $utilisateurDao = new UtilisateurDao($config);
+
+    // On récupère du formulaire le nom utilisateur/mot de passe
+    $nomUtilisateur = $_POST['nom-utilisateur'];
+    $motDePasse = $_POST['mot-de-passe'];
+
+    // On tente de récupérer l'utilisateur en BD à partir de son nom d'utilisateur
+    $u = $utilisateurDao->selectParNomUtilisateur($nomUtilisateur);
+
+    // Si l'utilisateur existe et que le mot de passe est valide
+    if (isset($u) && password_verify($motDePasse, $u->getHash())) 
+    {
+        // On met l'utilisateur dans la session
+        $_SESSION['utilisateur'] = $u;
+
+        // On retient l'heure de la connexion
+        $_SESSION['derniereActivite'] = time();
+
+        // Redirection vers le profil après connexion
+        header("Location: profil.phtml?id=" . $u->getId());
+        // exit;
+    } else {
+        $erreurs[] = "Nom d'utilisateur ou mot de passe invalide.";
+    }
+}
+
+// Gestion de la déconnexion
+else if (isset($_POST['bouton-deconnexion'])) {
+    detruireSession();
+    $infos[] = "Vous avez été déconnecté.";
+}
+
+// On récupère l'utilisateur connecté dans la session s'il y en a un, sinon on obtient null
+$utilisateurConnecte = getUtilisateurConnecte();
+?>
+
+<!doctype html>
+<html>
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Connexion - Point final</title>
+</head>
+<body>
+    <?php require_once 'section/entete.phtml'; ?>
+
+    <section id="contenu">
+        <?php require_once 'section/retroaction.phtml'; ?>
+
+        <div>
+            <h2>Formulaire de connexion</h2>
+        </div>
+
+        <?php if (!isset($utilisateurConnecte)) : ?>
+            <div>
+                <form action="connexion.phtml" method="post">
+                    <div>
+                        <label>Nom d'utilisateur :
+                            <input type="text" name="nom-utilisateur" class="form-control" value="<?= $nomUtilisateur ?? '' ?>" required />
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>Mot de passe :
+                            <input type="password" name="mot-de-passe" class="form-control" required />
+                        </label>
+                    </div>
+
+                    <div>
+                        <input type="submit" name="bouton-connexion" value="Se connecter" />
+                    </div>
+                </form>
+            </div>
+
+        <?php else : ?>
+
+                <div class="boite-de-contenu">
+                    <p>Vous êtes connecté en tant que <?= htmlspecialchars($utilisateurConnecte->getPrenom() . ' ' . $utilisateurConnecte->getNom()) ?></p>
+                </div>
+                <form action="connexion.phtml" method="post">
+                    <input type="submit" name="bouton-deconnexion" value="Se déconnecter" />
+                </form>
+
+        <?php endif; ?>
+    </section>
+
+    <?php require_once 'section/pied.phtml'; ?>
+</body>
+</html>

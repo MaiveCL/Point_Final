@@ -1,15 +1,17 @@
 <?php if (!empty($erreurs) && is_array($erreurs)) : ?>
-    <div class="zone-erreur">
-        <h4>Erreurs</h4>
-        <?php foreach ($erreurs as $err) : ?>
-            <p><?= $err ?></p>
-        <?php endforeach; ?>
-    </div>
-<?php elseif (!empty($infos) && is_array($infos)): ?>
-    <div class="zone-info">
-        <h4>Informations</h4>
-        <?php foreach ($infos as $info) : ?>
-            <p><?= $info ?></p>
-        <?php endforeach; ?>
-    </div>
+        <div class="boite-de-contenu">
+            <h4>Erreurs</h4>
+            <?php foreach ($erreurs as $err) : ?>
+                <p><?= $err ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php elseif (!empty($infos) && is_array($infos)): ?>
+        <div class="contenu">
+            <div class="boite-de-contenu">
+                <h4>Informations</h4>
+                <?php foreach ($infos as $info) : ?>
+                    <p><?= $info ?></p>
+                <?php endforeach; ?>
+            </div>
+        </div>
 <?php endif; ?>

@@ -1,0 +1,140 @@
+<?php
+require_once 'config.php';
+require_once 'session.php';
+
+$utilisateurDao = new UtilisateurDao($config);
+$erreurs = [];
+$infos = [];
+
+if (isset($_POST['bouton-inscription'])) {
+    // Récupération et nettoyage
+    $nomUtilisateur = trim($_POST['nom-utilisateur'] ?? '');
+    $prenom = trim($_POST['prenom'] ?? '');
+    $nom = trim($_POST['nom'] ?? '');
+    $bio = trim($_POST['bio'] ?? '');
+    $motDePasse = $_POST['mot-de-passe'] ?? '';
+    $confirmation = $_POST['confirmation'] ?? '';
+    $avatar = trim($_POST['avatar'] ?? '');
+    $roleId = 2; // joueur
+
+    // Validation
+    if (
+        $nomUtilisateur === '' || $prenom === '' || $nom === '' ||
+        $bio === '' || $motDePasse === '' || $confirmation === '' || $avatar === ''
+    ) {
+        $erreurs[] = "Tous les champs doivent être remplis.";
+    }
+    if (!preg_match('/^[a-zA-Z0-9]{1,50}$/', $nomUtilisateur)) {
+        $erreurs[] = "Le nom d'utilisateur doit être alphanumérique (1 à 50 caractères).";
+    }
+    if (strlen($motDePasse) < 5) {
+        $erreurs[] = "Le mot de passe doit contenir au moins 5 caractères.";
+    }
+    if ($motDePasse !== $confirmation) {
+        $erreurs[] = "La confirmation du mot de passe ne correspond pas.";
+    }
+    if (strlen($prenom) > 50 || strlen($prenom) < 1) {
+        $erreurs[] = "Le prénom doit faire entre 1 et 50 caractères.";
+    }
+    if (strlen($nom) > 50 || strlen($nom) < 1) {
+        $erreurs[] = "Le nom doit faire entre 1 et 50 caractères.";
+    }
+    if (strlen($bio) > 255) {
+        $erreurs[] = "La bio ne peut pas dépasser 255 caractères.";
+    }
+    if (!filter_var($avatar, FILTER_VALIDATE_URL)) {
+        $erreurs[] = "L'URL de l'avatar est invalide.";
+    }
+    if ($utilisateurDao->selectParNomUtilisateur($nomUtilisateur)) {
+        $erreurs[] = "Ce nom d'utilisateur est déjà pris.";
+    }
+
+    // Création si tout est valide
+    if (empty($erreurs)) {
+        $hash = password_hash($motDePasse, PASSWORD_DEFAULT);
+        $nouvelUtilisateur = new Utilisateur(
+            $nomUtilisateur,
+            $prenom,
+            $nom,
+            $bio,
+            new DateTime(),
+            $roleId,
+            $avatar,
+            $hash
+        );
+
+        $utilisateurDao->insert($nouvelUtilisateur);
+        $_SESSION['utilisateur'] = $nouvelUtilisateur;
+        $_SESSION['derniereActivite'] = time();
+
+        $infos[] = "Inscription réussie ! Bienvenue " . htmlspecialchars($prenom) . "!";
+    }
+}
+
+$utilisateurConnecte = getUtilisateurConnecte();
+?>
+
+<!doctype html>
+<html>
+<head>
+    <?php require_once 'section/head.phtml'; ?>
+    <title>Inscription - Point final</title>
+</head>
+<body>
+    <?php require_once 'section/entete.phtml'; ?>
+
+    <section id="contenu">
+        <?php require_once 'section/retroaction.phtml'; ?>
+
+        <div>
+            <h2>Créer un nouveau compte</h2>
+        </div>
+
+        <div>
+            <form action="inscription.phtml" method="post">
+                <div>
+                    <label>Nom d'utilisateur* :
+                        <input type="text" name="nom-utilisateur" class="form-control" value="<?= $nomUtilisateur ?? '' ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Mot de passe* :
+                        <input type="password" name="mot-de-passe" class="form-control" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Confirmation du mot de passe* :
+                        <input type="password" name="confirmation" class="form-control" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Prénom* :
+                        <input type="text" name="prenom" class="form-control" value="<?= $prenom ?? '' ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Nom* :
+                        <input type="text" name="nom" class="form-control" value="<?= $nom ?? '' ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <label>Bio* :
+                        <textarea name="bio" class="form-control" rows="3" required><?= $bio ?? '' ?></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label>URL de l’avatar* :
+                        <input type="url" name="avatar" class="form-control" value="<?= $avatar ?? '' ?>" required>
+                    </label>
+                </div>
+                <div>
+                    <input type="submit" name="bouton-inscription" class="btn btn-success" value="Créer mon compte">
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <?php require_once 'section/pied.phtml'; ?>
+</body>
+</html>

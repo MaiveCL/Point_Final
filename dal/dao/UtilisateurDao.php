@@ -68,4 +68,32 @@ class UtilisateurDao extends BaseDao
             $enregistrement['id']
         );
     }
+
+    public function insert(Utilisateur $utilisateur): void
+{
+    $connexion = $this->getConnexion();
+
+    $sql = "INSERT INTO utilisateur (
+                nom_utilisateur, prenom, nom, bio, date_creation,
+                role_id, url_avatar, hash
+            ) VALUES (
+                :nom_utilisateur, :prenom, :nom, :bio, :date_creation,
+                :role_id, :url_avatar, :hash
+            )";
+
+    $requete = $connexion->prepare($sql);
+    $requete->bindValue(':nom_utilisateur', $utilisateur->getNomUtilisateur());
+    $requete->bindValue(':prenom', $utilisateur->getPrenom());
+    $requete->bindValue(':nom', $utilisateur->getNom());
+    $requete->bindValue(':bio', $utilisateur->getBio());
+    $requete->bindValue(':date_creation', $utilisateur->getDateCreation()->format('Y-m-d'));
+    $requete->bindValue(':role_id', $utilisateur->getRoleId(), PDO::PARAM_INT);
+    $requete->bindValue(':url_avatar', $utilisateur->getUrlAvatar());
+    $requete->bindValue(':hash', $utilisateur->getHash());
+    $requete->execute();
+
+    // On met à jour l'ID généré automatiquement dans l'objet
+    $utilisateur->setId((int) $connexion->lastInsertId());
+}
+
 }

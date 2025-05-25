@@ -19,12 +19,11 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $utilisateur = $utilisateurDao->select($id);
     $statistiques = $statDao->selectClassementGlobalParJoueur($id);
     $parties = $partieDao->selectParJoueurId($id);
-    // vérifier si partie a bien été récupéré
     // if (!empty($parties)) {
     //     echo "<script>alert('Parties récupérées : " . count($parties) . "');</script>";
     // } else {
     //     echo "<script>alert('Aucune partie trouvée');</script>";
-    // }    // vérifier si ça marche en mettant une allerte ici
+    // }
 }
 ?>
 
@@ -41,6 +40,7 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
             <div class="max">
                 <?php require_once 'section/retroaction.phtml'; ?>
 
+                <!-- AFFICHER L'UTILISATEUR -->
                 <?php if ($utilisateur) : ?>
 
                     <div>
@@ -75,8 +75,7 @@ if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
                     <div class="boite-de-contenu">Utilisateur introuvable.</div>
                 <?php endif; ?>
 
-
-
+                <!-- AFFICHER les parties jouées de L'UTILISATEUR -->
                 <?php if ($parties) : ?>
 
                     <h2>Toutes les parties jouées</h2>

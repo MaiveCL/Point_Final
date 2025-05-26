@@ -37,6 +37,9 @@ if (isset($_POST['bouton-modifier'])) {
     if (!filter_var($avatar, FILTER_VALIDATE_URL)) {
         $erreurs[] = "L'URL de l'avatar est invalide.";
     }
+    if (!$utilisateurConnecte) {
+        $erreurs[] = "Vous êtes déconnecté.";
+    }
 
     if (empty($erreurs)) {
         $utilisateurConnecte->setPrenom($prenom);

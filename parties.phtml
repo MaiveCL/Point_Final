@@ -1,9 +1,26 @@
 <?php
 require_once "config.php";
+require_once 'session.php';
+$utilisateurConnecte = getUtilisateurConnecte();
+
+$erreurs = [];
+$infos = [];
+
+// Suppression d'une partie (si POST reçu)
+if (isset($_POST['partie-id']) && $utilisateurConnecte && $utilisateurConnecte->getRoleId() === 1) {
+    $partieId = $_POST['partie-id'];
+
+    if (ctype_digit($partieId)) {
+        $partieDao = new PartieDao($config);
+        $partieDao->delete((int)$partieId);
+        $infos[] = "La partie a été supprimée avec succès.";
+    } else {
+        $erreurs[] = "ID de partie invalide.";
+    }
+}
 
 $partieDao = new PartieDao($config);
 $toutesParties = $partieDao->selectToutesParties();
-
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +49,9 @@ $toutesParties = $partieDao->selectToutesParties();
                                 <th>Joueur 2</th>
                                 <th>Score J2</th>
                                 <th>Jeu</th>
+                                <?php if ($utilisateurConnecte && $utilisateurConnecte->getRoleId() === 1): ?>
+                                    <th>X</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,6 +75,16 @@ $toutesParties = $partieDao->selectToutesParties();
                                     </td>
                                     <td><?= $partie->getScoreJoueur2() ?></td>
                                     <td><?= htmlspecialchars($jeu->getNom()) ?></td>
+
+                                    <?php if ($utilisateurConnecte && $utilisateurConnecte->getRoleId() === 1): ?>
+                                        <td>
+                                            <form method="post" onsubmit="return confirm('Confirmer la suppression ?');">
+                                                <input type="hidden" name="partie-id" value="<?= $partie->getId() ?>">
+                                                <button type="submit">X</button>
+                                            </form>
+                                        </td>
+                                    <?php endif; ?>
+
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

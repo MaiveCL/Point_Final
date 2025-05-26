@@ -108,14 +108,22 @@ class PartieDao extends BaseDao
                 )";
 
         $requete = $connexion->prepare($sql);
-        $requete->bindValue(':j1_id', $partie->getJoueur1Id(), PDO::PARAM_INT);
-        $requete->bindValue(':j2_id', $partie->getJoueur2Id(), PDO::PARAM_INT);
-        $requete->bindValue(':j1_score', $partie->getScoreJoueur1(), PDO::PARAM_INT);
-        $requete->bindValue(':j2_score', $partie->getScoreJoueur2(), PDO::PARAM_INT);
-        $requete->bindValue(':jeu_id', $partie->getJeuId(), PDO::PARAM_INT);
+        $requete->bindValue(':j1_id', $partie->getJoueur1Id());
+        $requete->bindValue(':j2_id', $partie->getJoueur2Id());
+        $requete->bindValue(':j1_score', $partie->getScoreJoueur1());
+        $requete->bindValue(':j2_score', $partie->getScoreJoueur2());
+        $requete->bindValue(':jeu_id', $partie->getJeuId());
         $requete->execute();
 
         $partie->setId((int) $connexion->lastInsertId());
+    }
+
+    public function delete(int $id): void
+    {
+        $connexion = $this->getConnexion();
+        $requete = $connexion->prepare("DELETE FROM partie WHERE id = :id");
+        $requete->bindValue(":id", $id);
+        $requete->execute();
     }
 
 }

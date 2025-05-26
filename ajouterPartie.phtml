@@ -44,9 +44,9 @@ if (isset($_POST['bouton-ajouter'])) {
             null,
             (int)$j1,
             (int)$j2,
-            (int)$jeuId,
             (int)$score1,
-            (int)$score2
+            (int)$score2,
+            (int)$jeuId
         );
 
         $partieDao->insert($partie);

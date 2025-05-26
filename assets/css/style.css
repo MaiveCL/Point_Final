@@ -254,3 +254,7 @@ input:not([type="submit"]):not([type="button"]):not([type="reset"]) {
 .menu-deroulant:hover .sous-menu {
     display: block;
 }
+
+button{
+    cursor: pointer;
+}

@@ -13,7 +13,6 @@ class Utilisateur
     private string $urlAvatar;
     private string $hash;
 
-
     public function __construct(
         string $nomUtilisateur,
         string $prenom,
@@ -24,8 +23,7 @@ class Utilisateur
         string $urlAvatar,
         string $hash,
         int $id = 0
-    )
-    {
+    ) {
         $this->setId($id);
         $this->setNomUtilisateur($nomUtilisateur);
         $this->setPrenom($prenom);
@@ -56,6 +54,10 @@ class Utilisateur
 
     public function setNomUtilisateur(string $nomUtilisateur): self
     {
+        $nomUtilisateur = trim($nomUtilisateur);
+        if (empty($nomUtilisateur) || strlen($nomUtilisateur) > 50 || !ctype_alnum($nomUtilisateur)) {
+            throw new Exception("Le nom d'utilisateur doit être alphanumérique et contenir entre 1 et 50 caractères.");
+        }
         $this->nomUtilisateur = $nomUtilisateur;
         return $this;
     }
@@ -67,6 +69,10 @@ class Utilisateur
 
     public function setPrenom(string $prenom): self
     {
+        $prenom = trim($prenom);
+        if (empty($prenom) || strlen($prenom) > 50) {
+            throw new Exception("Le prénom doit contenir entre 1 et 50 caractères.");
+        }
         $this->prenom = $prenom;
         return $this;
     }
@@ -78,6 +84,10 @@ class Utilisateur
 
     public function setNom(string $nom): self
     {
+        $nom = trim($nom);
+        if (empty($nom) || strlen($nom) > 50) {
+            throw new Exception("Le nom doit contenir entre 1 et 50 caractères.");
+        }
         $this->nom = $nom;
         return $this;
     }
@@ -89,6 +99,10 @@ class Utilisateur
 
     public function setBio(string $bio): self
     {
+        $bio = trim($bio);
+        if (strlen($bio) > 255) {
+            throw new Exception("La bio ne doit pas dépasser 255 caractères.");
+        }
         $this->bio = $bio;
         return $this;
     }
@@ -133,6 +147,10 @@ class Utilisateur
 
     public function setUrlAvatar(string $urlAvatar): self
     {
+        $urlAvatar = trim($urlAvatar);
+        if (!filter_var($urlAvatar, FILTER_VALIDATE_URL)) {
+            throw new Exception("L'URL de l'avatar est invalide.");
+        }
         $this->urlAvatar = $urlAvatar;
         return $this;
     }
